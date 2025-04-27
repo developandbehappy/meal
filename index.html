@@ -172,6 +172,15 @@
             align-items: center;
         }
 
+        .random-btn {
+            background-color: var(--accent-color);
+            margin-left: 15px;
+        }
+
+        .random-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
         .meal-time {
             background-color: var(--accent-color);
             color: white;
@@ -366,9 +375,11 @@
 
         <div class="tab-content active" id="plan-content">
             <div class="week-selector">
-                <button class="week-btn" id="prev-week">← Предыдущая</button>
-                <div class="current-week">Неделя 1</div>
-                <button class="week-btn" id="next-week">Следующая →</button>
+                <div class="week-selector">
+                    <button class="week-btn" id="prev-week">← Предыдущая</button>
+                    <button class="week-btn random-btn" id="random-day">Случайный день</button>
+                    <button class="week-btn" id="next-week">Следующая →</button>
+                </div>
             </div>
 
             <div class="days-of-week">
@@ -1048,6 +1059,21 @@
                     updateCalendar();
                 }
             });
+
+            document.getElementById('random-day').addEventListener('click', openRandomDay);
+        }
+
+        function openRandomDay() {
+            // Выбор случайной недели
+            const randomWeekIndex = Math.floor(Math.random() * mealPlan.length);
+            const randomWeek = mealPlan[randomWeekIndex];
+
+            // Выбор случайного дня из недели
+            const randomDayIndex = Math.floor(Math.random() * randomWeek.length);
+            const randomDay = randomWeek[randomDayIndex];
+
+            // Открытие модального окна с выбранным днем
+            openDayModal(randomDay);
         }
 
         // Функция обновления календаря
@@ -1056,7 +1082,6 @@
             calendar.innerHTML = '';
 
             const weekData = mealPlan[currentWeek];
-            document.querySelector('.current-week').textContent = `Неделя ${currentWeek + 1}`;
 
             weekData.forEach(day => {
                 const dayElement = document.createElement('div');
